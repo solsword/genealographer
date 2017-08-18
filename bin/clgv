@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import re
+
+NODE = re.compile("gvn\(([^)]*),([^),]*)\)")
+NODE_PROPERTY = re.compile("gvnp\(([^)]*),([^),]*),([^),]*)\)")
+EDGE = re.compile("gve\(([^),]*),([^),]*),([^),]*)\)")
+EDGE_PROPERTY = re.compile("gvep\(([^),]*),([^),]*),([^),]*),([^),]*)\)")
+
+TEMPLATE = """
+digraph G {{
+  rankdir=TB;
+  subgraph {{
+    {}
+  }}
+}}
+"""
+
+def rq(v):
+  """
+  Removes quotes if present from within a string.
+  """
+  if v[0] == '"':
+    return v[1:-1]
+  else:
+    return v
+
+def main(inp):
+  nodes = NODE.findall(inp)
+  edges = EDGE.findall(inp)
+  node_properties = NODE_PROPERTY.findall(inp)
+  edge_properties = EDGE_PROPERTY.findall(inp)
+
+  npmap = {}
+  epmap = {}
+
+  for n, p in nodes:
+    n = rq(n)
+    p = rq(p)
+    npmap[n] = p
+
+  for fr, to, p in edges:
+    fr = rq(fr)
+    to = rq(to)
+    p = rq(p)
+    epmap[(fr, to)] = p
+
+  for n, pr, pv in node_properties:
+    n = rq(n)
+    pr = rq(pr)
+    pv = rq(pv)
+    if npmap[n]:
+      npmap[n] += " {}={}".format(pr, pv)
+    else:
+      npmap[n] += "{}={}".format(pr, pv)
+
+  for fr, to, pr, pv in edge_properties:
+    fr = rq(fr)
+    to = rq(to)
+    pr = rq(pr)
+    pv = rq(pv)
+    if epmap[(fr, to)]:
+      epmap[(fr, to)] += " {}={}".format(pr, pv)
+    else:
+      epmap[(fr, to)] += "{}={}".format(pr, pv)
+
+  content = ""
+  for n in npmap:
+    p = npmap[n]
+    if "label" in p:
+      content += "{} [ {} ];\n".format(n, p)
+    else:
+      if p:
+        content += "{} [ {} ];\n".format(n, "label={} ".format(n) + p)
+      else:
+        content += "{} [ {} ];\n".format(n, "label={}".format(n))
+
+  for (fr, to) in epmap:
+    p = epmap[(fr, to)]
+    content += "{} -> {} [ {} ];\n".format(fr, to, p)
+
+  print(TEMPLATE.format(content))
+
+if __name__ == "__main__":
+  main(sys.stdin.read())

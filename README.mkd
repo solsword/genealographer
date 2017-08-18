@@ -1,0 +1,28 @@
+# Genealographer
+
+Answer set programming (clingo) code for generating family trees. Currently
+runs a multi-stage pipeline (see makefile) and isn't terribly efficient,
+sometimes even failing at later stages. You could also try solving jointly,
+although that has its own efficiency problems.
+
+## Files
+
+- `Makefile`---Contains recipes for running stuff.
+- `setup.lp`---Rolls a random (with appropriate options; see `Makefile`) set of
+  constraints on stand-out situations. Constants at the top should provide most
+  control you'd want. Note that there are probably some unidentified stand-out
+  situations...
+- `family.lp`---Core relationship generation code. Doesn't deal with ages, but
+  creates a family tree structure. This is the first stage (after setup.lp is
+  run independently to generate constraints).
+- `generations.lp`---Not being used in the default pipeline; prevents
+  cross-generation liaisons by assigning each person a unique generation. If
+  used, should be run during the same stage as `family.lp`.
+- `age.lp`---Code for assigning ages to each person. Currently has some
+  efficiency problems related to partner age constraints. Runs as a second
+  phase after family.lp, although in principle they could be run together. It
+  is currently possible for `family.lp` to spit out a structure that causes
+  `age.lp` to return UNSATISFIABLE, but it's not that common (I hope :P).
+- `bin/clgv`---Small Python utility for visualizing answer sets using
+  `graphviz` by scooping up a small set of predicates. Requires... Python (3)
+  and `graphviz`.

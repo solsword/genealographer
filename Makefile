@@ -39,4 +39,4 @@ int/_fages.lp: int/_ftree.lp int
 	echo "." >> int/_fages.lp
 
 out/viz.pdf: int/_fages.lp
-	cat int/_fages.lp | clgv | dot -Tpdf > out/viz.pdf
+	cat int/_fages.lp | bin/clgv | dot -Tpdf > out/viz.pdf
