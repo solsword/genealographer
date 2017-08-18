@@ -1,0 +1,4 @@
+seed
+*.pdf
+int/*
+out/*
