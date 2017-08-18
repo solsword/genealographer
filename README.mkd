@@ -5,6 +5,21 @@ runs a multi-stage pipeline (see makefile) and isn't terribly efficient,
 sometimes even failing at later stages. You could also try solving jointly,
 although that has its own efficiency problems.
 
+## What do?
+
+Run `make out/viz.pdf; open out/viz.pdf` or the equivalent on your system.
+Requires `clingo`, Python (3) and `graphviz`. You can also run `make
+int/_ftree.lp` or `int/_fages.lp` to create just the tree or just the tree with
+ages and skip visualization, which only requires `clingo`.
+
+## Versions
+
+This is `genealographer` version 0.1.
+
+- `clingo` 5.2.0 (`libgringo` 5.2.0 / `libclasp` 3.3.0)
+- Python 3.6.2
+- `graphviz` version 2.40.1 (20161225.0304)
+
 ## Files
 
 - `Makefile`---Contains recipes for running stuff.
