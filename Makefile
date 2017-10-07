@@ -1,4 +1,6 @@
-.PHONY: seed
+
+.PHONY: seed clean
+
 int:
 	mkdir -p int
 
@@ -40,3 +42,6 @@ int/_fages.lp: int/_ftree.lp int
 
 out/viz.pdf: out int/_fages.lp
 	cat int/_fages.lp | bin/clgv | dot -Tpdf > out/viz.pdf
+
+clean:
+	rm -rf int out
