@@ -7,7 +7,7 @@ although that has its own efficiency problems.
 
 ## What do?
 
-Run `make seed out/viz.pdf; open out/viz.pdf` or the equivalent on your system.
+Run `make viz; open out/viz.pdf` or the equivalent on your system.
 Requires `clingo`, Python (3) and `graphviz`. You can also run `make
 int/_ftree.lp` or `int/_fages.lp` to create just the tree or just the tree with
 ages and skip visualization, which only requires `clingo`.
